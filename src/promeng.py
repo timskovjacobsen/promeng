@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union, Optional
 from dataclasses import dataclass
 
 
@@ -44,3 +44,13 @@ class Cart:
     def __getitem__(self, id_: str) -> CartItem:
         return self._items_dict[id_]
 
+
+@dataclass
+class CurrentPromotions:
+    promotions: List[Union[PromotionByQuantity, PromotionByVariety]]
+
+
+@dataclass
+class Checkout:
+    cart: Cart
+    current_promotions: Optional[CurrentPromotions] = None
