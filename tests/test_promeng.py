@@ -8,6 +8,8 @@ from src.promeng import (
     CartItem,
 )
 
+# TODO: Repitition of code chunks below. Should be made as fixtures in conftest.py
+
 
 def test_scanrioA():
     # ---- Setup ----
@@ -51,7 +53,7 @@ def test_scanrioB():
     current_promotions = CurrentPromotions([promotion1, promotion2, promotion3])
 
     cart_items = [
-        # Five As
+        # Five As (NOTE: quantity arg does not work properly yet)
         CartItem(skus[0], quantity=1),
         CartItem(skus[0], quantity=1),
         CartItem(skus[0], quantity=1),

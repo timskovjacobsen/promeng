@@ -19,7 +19,9 @@ class PromotionInterface(ABC):
         pass
 
     @abstractmethod
-    def filter(self, skus: List[StockKeepingUnit]) -> Tuple[StockKeepingUnit]:
+    def filter(
+        self, skus: List[StockKeepingUnit]
+    ) -> Tuple[List[StockKeepingUnit], List[StockKeepingUnit]]:
         """Return the SKUs that are part of the promotion and not, respectively."""
         pass
 
@@ -30,7 +32,9 @@ class PromotionByQuantity(PromotionInterface):
     quantity: int
     price: float
 
-    def filter(self, skus: List[StockKeepingUnit]) -> Tuple[StockKeepingUnit]:
+    def filter(
+        self, skus: List[StockKeepingUnit]
+    ) -> Tuple[List[StockKeepingUnit], List[StockKeepingUnit]]:
         """Return the SKUs that are part of the promotion and not, respectively."""
         # Get the count of the SKUs mathching the ID of this promotion
         ids = [sku.id_ for sku in skus]
