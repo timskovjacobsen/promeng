@@ -101,6 +101,10 @@ class CartItem:
     def id_(self):
         return self.sku.id_
 
+    @property
+    def price(self):
+        return self.sku.price
+
 
 class Cart:
     def __init__(self, items: List[CartItem] = None):
@@ -125,3 +129,27 @@ class CurrentPromotions:
 class Checkout:
     cart: Cart
     current_promotions: Optional[CurrentPromotions] = None
+
+@dataclass
+class PromotionEngine:
+    checkout: Checkout
+
+    def apply_promotions(self) -> float:
+        """Return the total amount after applying currently active promotions."""
+
+        total = 0
+
+        skus = self.checkout.cart.items
+
+        promotions = self.checkout.current_promotions.promotions
+
+        # Apply promotions, removing SKUs as they receive promotions
+        non_promotion_skus = skus
+        for promotion in promotions:
+            promotion_skus, non_promotion_skus = promotion.filter(non_promotion_skus)
+            total += promotion.apply(promotion_skus)
+
+        # Sum all remaining SKUs that did not have any promotion applied to them
+        total += sum(sku.price for sku in non_promotion_skus)
+
+        return total
