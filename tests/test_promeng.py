@@ -49,3 +49,19 @@ def test_PromotionsByQuantity_apply_method():
     expected = 2 * 130 + 1 * 50
 
     assert actual == expected
+
+
+def test_PromotionByVariety_apply_method():
+    # ---- Setup ----
+    A = StockKeepingUnit(id_="A", price=50)
+    C = StockKeepingUnit(id_="C", price=20)
+    D = StockKeepingUnit(id_="D", price=15)
+
+    # ---- Execute -----
+    promotion = PromotionByVariety(promo_ids={"C", "D"}, price=30)
+
+    # ---- Verify -----
+    actual = promotion.apply(skus=[A, C, D, A, C, D, D])
+    expected = 50 + 0 + 30 + 50 + 0 + 30 + 15
+
+    assert actual == expected
