@@ -17,9 +17,10 @@ def test_scanrioA():
 
     # ---- Execute -----
     promotion1 = PromotionByQuantity(sku=skus[0], quantity=3, price=130)
-    promotion2 = PromotionByVariety(skus=[skus[2], skus[3]], price=130)
+    promotion2 = PromotionByQuantity(sku=skus[1], quantity=2, price=45)
+    promotion3 = PromotionByVariety(promo_ids={"C", "D"}, price=130)
 
-    current_promotions = CurrentPromotions([promotion1, promotion2])
+    current_promotions = CurrentPromotions([promotion1, promotion2, promotion3])
 
     cart_items = [
         CartItem(skus[0], quantity=1),
