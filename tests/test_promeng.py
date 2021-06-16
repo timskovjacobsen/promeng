@@ -37,6 +37,44 @@ def test_scanrioA():
     assert actual == expected
 
 
+def test_scanrioB():
+    # ---- Setup ----
+    products = {"A": 50, "B": 30, "C": 20, "D": 15}
+
+    skus = [StockKeepingUnit(id_=i, price=p) for i, p in products.items()]
+
+    # ---- Execute -----
+    promotion1 = PromotionByQuantity(sku=skus[0], quantity=3, price=130)
+    promotion2 = PromotionByQuantity(sku=skus[1], quantity=2, price=45)
+    promotion3 = PromotionByVariety(promo_ids={"C", "D"}, price=30)
+
+    current_promotions = CurrentPromotions([promotion1, promotion2, promotion3])
+
+    cart_items = [
+        # Five As
+        CartItem(skus[0], quantity=1),
+        CartItem(skus[0], quantity=1),
+        CartItem(skus[0], quantity=1),
+        CartItem(skus[0], quantity=1),
+        CartItem(skus[0], quantity=1),
+        # Five Bs
+        CartItem(skus[1], quantity=1),
+        CartItem(skus[1], quantity=1),
+        CartItem(skus[1], quantity=1),
+        CartItem(skus[1], quantity=1),
+        CartItem(skus[1], quantity=1),
+        # One C
+        CartItem(skus[2], quantity=1),
+    ]
+    cart = Cart(items=cart_items)
+    checkout = Checkout(cart, current_promotions)
+
+    # ---- Verify -----
+    actual = checkout.total_order_price()
+    expected = 370
+
+    assert actual == expected
+
 def test_PromotionByQuantity_apply_method():
     # ---- Setup ----
     A = StockKeepingUnit(id_="A", price=50)
