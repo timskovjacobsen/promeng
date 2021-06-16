@@ -1,5 +1,6 @@
 from typing import List, Union, Optional
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
 
 
 @dataclass
@@ -8,17 +9,34 @@ class StockKeepingUnit:
     price: float
 
 
+class PromotionInterface(ABC):
+    """Interface class for various types of promotions."""
+
+    @abstractmethod
+    def apply(self, skus: List[StockKeepingUnit]) -> float:
+        """Apply a promotion."""
+        pass
+
+
 @dataclass
-class PromotionByQuantity:
+class PromotionByQuantity(PromotionInterface):
     sku: StockKeepingUnit
     quantity: int
     price: float
 
+    def apply(self, skus: List[StockKeepingUnit]) -> float:
+        pass
+
 
 class PromotionByVariety:
+
+@dataclass
+class PromotionByVariety(PromotionInterface):
     skus: List[StockKeepingUnit]
     price: float
 
+    def apply(self, skus: List[StockKeepingUnit]) -> float:
+        pass
 
 
 @dataclass
