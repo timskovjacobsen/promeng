@@ -130,6 +130,10 @@ class Checkout:
     cart: Cart
     current_promotions: Optional[CurrentPromotions] = None
 
+    def total_order_price(self):
+        return PromotionEngine(self).apply_promotions()
+
+
 @dataclass
 class PromotionEngine:
     checkout: Checkout
