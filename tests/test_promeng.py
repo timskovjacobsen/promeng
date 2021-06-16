@@ -34,3 +34,18 @@ def test_scanrioA():
     expected = 100
 
     assert actual == expected
+
+
+def test_PromotionsByQuantity_apply_method():
+    # ---- Setup ----
+    A = StockKeepingUnit(id_="A", price=50)
+    B = StockKeepingUnit(id_="B", price=50)
+
+    # ---- Execute -----
+    promotion = PromotionByQuantity(sku=A, quantity=3, price=130)
+
+    # ---- Verify -----
+    actual = promotion.apply(skus=[A, A, B, B, A, A, A, B, B, A, A])
+    expected = 2 * 130 + 1 * 50
+
+    assert actual == expected
