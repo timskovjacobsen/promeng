@@ -51,6 +51,42 @@ def test_PromotionsByQuantity_apply_method():
     assert actual == expected
 
 
+def test_PromotionByQuantity_filter_method():
+    # ---- Setup ----
+    A = StockKeepingUnit(id_="A", price=50)
+    C = StockKeepingUnit(id_="C", price=20)
+    D = StockKeepingUnit(id_="D", price=15)
+
+    promotion = PromotionByQuantity(sku=A, quantity=3, price=130)
+
+    # ---- Execute -----
+    actual_promos, actual_non_promos = promotion.filter(skus=[A, C, A, A, A, D, D])
+
+    # ---- Verify -----
+    expected_promos, expected_non_promos = [A, A, A], [C, A, D, D]
+
+    assert actual_promos == expected_promos
+    assert actual_non_promos == expected_non_promos
+
+
+def test_PromotionByQuantity_filter_method2():
+    # ---- Setup ----
+    A = StockKeepingUnit(id_="A", price=50)
+    B = StockKeepingUnit(id_="B", price=50)
+    promotion = PromotionByQuantity(sku=A, quantity=3, price=130)
+
+    # ---- Execute -----
+    actual_promos, actual_non_promos = promotion.filter(
+        skus=[A, A, B, B, A, A, A, B, B, A, A]
+    )
+
+    # ---- Verify -----
+    expected_promos, expected_non_promos = [A, A, A, A, A, A], [B, B, B, B, A]
+
+    assert actual_promos == expected_promos
+    assert actual_non_promos == expected_non_promos
+
+
 def test_PromotionByVariety_apply_method():
     # ---- Setup ----
     A = StockKeepingUnit(id_="A", price=50)
@@ -60,8 +96,12 @@ def test_PromotionByVariety_apply_method():
     # ---- Execute -----
     promotion = PromotionByVariety(promo_ids={"C", "D"}, price=30)
 
+    promo_skus, _ = promotion.filter(skus=[A, C, D, A, C, D, D])
+
+    print(promo_skus)
+
     # ---- Verify -----
-    actual = promotion.apply(skus=[A, C, D, A, C, D, D])
-    expected = 50 + 0 + 30 + 50 + 0 + 30 + 15
+    actual = promotion.apply(skus=promo_skus)
+    expected = 0 + 30 + 0 + 30
 
     assert actual == expected
